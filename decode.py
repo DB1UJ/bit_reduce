@@ -3,9 +3,7 @@
 """This is a awesome
     python script!"""
 
-"""import sys
-print("User Current Version:-", sys.version)"""
-code_word = int(input("What Code Word: "))
+code_word = int(input("Code word: "))
 out_word = str()
 while code_word != 0:
     out_word = chr((code_word & 0b111111)+48) + out_word
