@@ -89,14 +89,15 @@ for a1 in char_range('A', 'R'):
 """
 
 
-def encode_call(call):
+def encode_call(call, bytes_length=6):
     """
     @auther: DB1UJ
     Args:
-      call:string: ham radio call sign [A-Z,0-9]
+        call:string: ham radio call sign [A-Z,0-9]
+        bytes_length: int number of output bytes, have to fit 6 bits/sign, standard 6 bytes
 
     Returns:
-       6 bytes contains 6 bit/sign encoded 8 char call sign (only upper letters + numbers)
+        bytes_length bytes (standard 6) contains 6 bits/sign encoded 8 char call sign (only upper letters + numbers)
     """
     out_code_word = int(0)
 
@@ -107,16 +108,16 @@ def encode_call(call):
         out_code_word = out_code_word << 6 # shift left 6 bit, making space for a new char
         out_code_word = out_code_word | (int_val & 0b111111) # bit OR adds the new char, masked with AND 0b111111
 
-    return out_code_word.to_bytes(length=6, byteorder='big')
+    return out_code_word.to_bytes(length=bytes_length, byteorder='big')
 
 def decode_call(b_code_word:bytes):
     """
     @auther: DB1UJ
     Args:
-      b_code_word:bytes: 6 bytes with 6 bit/sign valid data char signs LSB
+        b_code_word:bytes: 6 bytes with 6 bits/sign valid data char signs LSB
 
     Returns:
-      call:str: upper case ham radio call sign [A-Z,0-9]
+        call:str: upper case ham radio call sign [A-Z,0-9]
     """
     code_word = int.from_bytes(b_code_word, byteorder='big', signed=False)
 
@@ -129,7 +130,9 @@ def decode_call(b_code_word:bytes):
 
 # manual test
 call = input("Call: ")
+num = int(input("num: "))
 print("Codeword (6 byte bigendian): ",end='')
-print(str(encode_call(call)))
-print(decode_call(encode_call(call)))
+print(str(encode_call(call,num)))
+print(len(encode_call(call,num)))
+print(decode_call(encode_call(call,num)))
 
