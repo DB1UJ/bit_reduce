@@ -67,10 +67,10 @@ def decode_grid(b_code_word:bytes):
     return grid
 
 # manual test
-grid = input("Grid: ")
-print("Codeword (length 26 bit LSB in 4 byte bigendian): ",end='')
-print(str(encode_grid(grid)))
-print(decode_grid(encode_grid(grid)))
+#grid = input("Grid: ")
+#print("Codeword (length 26 bit LSB in 4 byte bigendian): ",end='')
+#print(str(encode_grid(grid)))
+#print(decode_grid(encode_grid(grid)))
 
 # automatic test
 """
