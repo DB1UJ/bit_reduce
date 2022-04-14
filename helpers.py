@@ -7,10 +7,10 @@ def encode_grid(grid):
     """
     @auther: DB1UJ
     Args:
-      grid:string: maidenhead QTH locater [a-r][a-r][0-9][0-9][a-x][a-x]
+        grid:string: maidenhead QTH locater [a-r][a-r][0-9][0-9][a-x][a-x]
 
     Returns:
-      4 bytes contains 26 bit valid data with encoded grid locator
+        4 bytes contains 26 bit valid data with encoded grid locator
     """
     out_code_word = int(0)
 
@@ -41,10 +41,10 @@ def decode_grid(b_code_word:bytes):
     """
     @auther: DB1UJ
     Args:
-      b_code_word:bytes: 4 bytes with 26 bit valid data LSB
+        b_code_word:bytes: 4 bytes with 26 bit valid data LSB
 
     Returns:
-      grid:str: upper case maidenhead QTH locater [A-R][A-R][0-9][0-9][A-X][A-X]
+        grid:str: upper case maidenhead QTH locater [A-R][A-R][0-9][0-9][A-X][A-X]
     """
     code_word = int.from_bytes(b_code_word, byteorder='big', signed=False)
 
