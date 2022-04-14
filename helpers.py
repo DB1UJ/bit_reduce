@@ -89,15 +89,14 @@ for a1 in char_range('A', 'R'):
 """
 
 
-def encode_call(call, bytes_length=6):
+def encode_call(call):
     """
     @auther: DB1UJ
     Args:
-        call:string: ham radio call sign [A-Z,0-9]
-        bytes_length: int number of output bytes, have to fit 6 bits/sign, standard 6 bytes
+        call:string: ham radio call sign [A-Z,0-9], last char SSID 0-63
 
     Returns:
-        bytes_length bytes (standard 6) contains 6 bits/sign encoded 8 char call sign (only upper letters + numbers)
+        6 bytes contains 6 bits/sign encoded 8 char call sign with SSID (only upper letters + numbers, SSID)
     """
     out_code_word = int(0)
 
@@ -107,8 +106,11 @@ def encode_call(call, bytes_length=6):
         int_val = ord(x)-48 # -48 reduce bits, begin with first number utf8 table
         out_code_word = out_code_word << 6 # shift left 6 bit, making space for a new char
         out_code_word = out_code_word | (int_val & 0b111111) # bit OR adds the new char, masked with AND 0b111111
+    out_code_word = out_code_word >> 6 # clean last char
+    out_code_word = out_code_word << 6 # make clean space
+    out_code_word = out_code_word | (ord(call[-1]) & 0b111111) # add the SSID uncoded only 0 - 63
 
-    return out_code_word.to_bytes(length=bytes_length, byteorder='big')
+    return out_code_word.to_bytes(length=6, byteorder='big')
 
 def decode_call(b_code_word:bytes):
     """
@@ -117,22 +119,24 @@ def decode_call(b_code_word:bytes):
         b_code_word:bytes: 6 bytes with 6 bits/sign valid data char signs LSB
 
     Returns:
-        call:str: upper case ham radio call sign [A-Z,0-9]
+        call:str: upper case ham radio call sign [A-Z,0-9] + binary SSID
     """
     code_word = int.from_bytes(b_code_word, byteorder='big', signed=False)
+    ssid = chr(code_word & 0b111111)
 
     call = str()
     while code_word != 0:
         call  = chr((code_word & 0b111111)+48) + call
         code_word = code_word >> 6
+    call = call[0:-1] + ssid # remove the last char from call and replace with SSID
 
     return call
 
 # manual test
 call = input("Call: ")
-num = int(input("num: "))
 print("Codeword (6 byte bigendian): ",end='')
-print(str(encode_call(call,num)))
-print(len(encode_call(call,num)))
-print(decode_call(encode_call(call,num)))
+print(str(encode_call(call)))
+#print(len(encode_call(call)))
+print(decode_call(encode_call(call)))
+#print(len(decode_call(encode_call(call))))
 
