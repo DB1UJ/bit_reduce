@@ -96,7 +96,7 @@ def encode_call(call):
         call:string: ham radio call sign [A-Z,0-9], last char SSID 0-63
 
     Returns:
-        6 bytes contains 6 bits/sign encoded 8 char call sign with SSID (only upper letters + numbers, SSID)
+        6 bytes contains 6 bits/sign encoded 8 char call sign with binary SSID (only upper letters + numbers, SSID)
     """
     out_code_word = int(0)
 
@@ -122,7 +122,7 @@ def decode_call(b_code_word:bytes):
         call:str: upper case ham radio call sign [A-Z,0-9] + binary SSID
     """
     code_word = int.from_bytes(b_code_word, byteorder='big', signed=False)
-    ssid = chr(code_word & 0b111111)
+    ssid = chr(code_word & 0b111111) # save the uncoded binary SSID
 
     call = str()
     while code_word != 0:
