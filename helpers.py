@@ -15,10 +15,6 @@ def encode_grid(grid):
 
     grid = grid.upper() # upper case to be save
 
-    if len(grid) != 6:
-        print("Wrong length of grid: " + str(len(grid)))
-        return -1
-
     int_first = ord(grid[0])-65 # -65 offset for 'A' become zero, utf8 table
     int_sec   = ord(grid[1])-65 # -65 offset for 'A' become zero, utf8 table
 
